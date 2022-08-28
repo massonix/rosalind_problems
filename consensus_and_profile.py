@@ -45,7 +45,7 @@ G: 1 1 6 3 0 1 0 0
 T: 1 5 0 0 0 1 1 6
 """
 
-
+import numpy as np
 fasta = open("example_fasta.fa", "r")
 
 fasta_lines = fasta.readlines()
@@ -55,7 +55,7 @@ for line in fasta_lines:
         string_list.append([])
     else:
         line = list(line.strip("\n"))
-        string_list[len(string_list) - 1].extend(line)
+        string_list[-1].extend(line)
 
 mat = np.array(string_list).T
 profile = []
@@ -65,6 +65,8 @@ for row in mat:
     
 profile = np.array(profile).T
 
+consensus = "".join(["ACGT"[np.argmax(profile.T[x])] for x in range(len(profile.T))])
+print(consensus)
 for i, base in enumerate("ACGT"):
     output = " ".join([str(x) for x in profile[i]])
     output = base + ": " + output
